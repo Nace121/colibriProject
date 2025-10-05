@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "apps.companies",
     "apps.core",
     "apps.teams",
+    "apps.projects",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

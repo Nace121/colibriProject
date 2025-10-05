@@ -10,4 +10,5 @@ urlpatterns = [
     path("students/", include("apps.students.urls", namespace="students")),
     path("companies/", include("apps.companies.urls", namespace="companies")),
     path("teams/", include("apps.teams.urls", namespace="teams")),
+    path("projects/", include("apps.projects.urls", namespace="projects")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
