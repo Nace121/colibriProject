@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-8 mx-auto">
+  <h1 class="h4 mb-3">Profil étudiant</h1>
+  <p><strong>Université :</strong> {{ student.university }}</p>
+  <p><strong>Niveau :</strong> {{ student.level }}</p>
+  <p><strong>Spécialisation :</strong> {{ student.specialization }}</p>
+  <p><strong>Bio :</strong> {{ student.bio }}</p>
+</div>
+{% endblock %}

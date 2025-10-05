@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="col-md-8 mx-auto">
+  <h1 class="h4 mb-3">Mon profil étudiant</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-4 bg-white rounded shadow-sm">
+  <h1 class="h4 mb-3">Bienvenue sur ColibriHub</h1>
+  <p>Créez un compte étudiant ou entreprise et complétez votre profil.</p>
+  <div class="d-flex gap-2">
+    <a class="btn btn-primary" href="{% url 'accounts:register_student' %}">Étudiant</a>
+    <a class="btn btn-secondary" href="{% url 'accounts:register_company' %}">Entreprise</a>
+  </div>
+</div>
+{% endblock %}
