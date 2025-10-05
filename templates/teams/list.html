@@ -1,0 +1,27 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4">Mes équipes</h1>
+  <a class="btn btn-primary" href="{% url 'teams:create' %}">Créer une équipe</a>
+</div>
+{% if teams %}
+  <div class="list-group">
+    {% for t in teams %}
+      <a class="list-group-item list-group-item-action" href="{% url 'teams:detail' t.id %}">
+        <div class="d-flex justify-content-between">
+          <div>
+            <strong>{{ t.name }}</strong><br>
+            <small>Leader: {{ t.leader.user.username }}</small>
+          </div>
+          <div>
+            <span class="badge bg-secondary">{{ t.members.count }} / 4</span>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Aucune équipe.</p>
+{% endif %}
+{% endblock %}

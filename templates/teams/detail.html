@@ -1,0 +1,34 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="mb-3 d-flex justify-content-between align-items-center">
+  <h1 class="h4">{{ team.name }}</h1>
+  <a class="btn btn-outline-primary" href="{% url 'teams:invite' team.id %}">Inviter un membre</a>
+</div>
+<p><strong>Leader :</strong> {{ team.leader.user.username }}</p>
+<p><strong>Spécialisation :</strong> {{ team.specialization|default:"—" }}</p>
+
+<h2 class="h5 mt-4">Membres</h2>
+<ul class="list-group mb-3">
+  {% for m in team.members.all %}
+    <li class="list-group-item d-flex justify-content-between">
+      <span>{{ m.user.username }}</span>
+      {% if m == team.leader %}<span class="badge bg-info">Leader</span>{% endif %}
+    </li>
+  {% empty %}
+    <li class="list-group-item">Aucun membre pour le moment.</li>
+  {% endfor %}
+</ul>
+
+<h2 class="h5 mt-4">Invitations</h2>
+<ul class="list-group">
+  {% for inv in team.invitations.all %}
+    <li class="list-group-item d-flex justify-content-between">
+      <span>{{ inv.student.user.username }}</span>
+      <span class="badge bg-secondary">{{ inv.status }}</span>
+    </li>
+  {% empty %}
+    <li class="list-group-item">Aucune invitation envoyée.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
