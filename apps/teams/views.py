@@ -6,6 +6,7 @@ from apps.core.decorators import student_required
 from apps.students.models import Student
 from .models import Team, TeamInvitation
 from .forms import TeamCreateForm, TeamInviteForm
+from apps.notifications.services import notify  # NEW
 
 @login_required
 @student_required
@@ -58,6 +59,13 @@ def team_invite(request, team_id):
                 inv, created = TeamInvitation.objects.get_or_create(team=team, student=invitee)
                 if created:
                     messages.success(request, "Invitation envoyée.")
+                    # Notify invitee
+                    notify(
+                        invitee.user,
+                        f"Tu as été invité à rejoindre l'équipe '{team.name}'.",
+                        url="/teams/",
+                        type="TEAM_INVITE",
+                    )
                 else:
                     messages.info(request, "Invitation déjà existante.")
             return redirect("teams:detail", team_id=team.id)

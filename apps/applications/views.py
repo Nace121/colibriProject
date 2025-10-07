@@ -1,4 +1,3 @@
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -8,6 +7,7 @@ from apps.projects.models import Project
 from apps.teams.models import Team
 from .models import Application
 from .forms import ApplicationCreateForm
+from apps.notifications.services import notify  # NEW
 
 @login_required
 @student_required
@@ -27,6 +27,15 @@ def submit_application(request, project_id):
             app.project = project
             app.save()
             form.save_m2m()
+
+            # Notify company
+            notify(
+                project.company.user,
+                f"Nouvelle candidature de l'équipe {app.team.name} sur '{project.title}'.",
+                url=f"/applications/project/{project.id}/",
+                type="APPLICATION_SUBMITTED",
+            )
+
             messages.success(request, "Candidature envoyée.")
             return redirect("applications:mine")
     else:
@@ -37,6 +46,7 @@ def submit_application(request, project_id):
 @student_required
 def my_applications(request):
     # All applications for teams where the user is a member
+    from apps.teams.models import Team
     teams = Team.objects.filter(members__user=request.user).distinct()
     apps = Application.objects.filter(team__in=teams).select_related("project","team")
     return render(request, "applications/my_list.html", {"applications": apps})
@@ -72,16 +82,22 @@ def application_accept(request, application_id):
     # Set project status and assigned team if available
     try:
         from apps.projects.models import Project as ProjectModel
-        from apps.teams.models import Team as TeamModel
-        # Add assigned_team only if the field exists
         if hasattr(project, "assigned_team_id"):
             project.assigned_team_id = app.team.id
         project.status = ProjectModel.Status.IN_PROGRESS
         project.save()
     except Exception:
-        # Do not block accept if field not present
         project.status = project.Status.IN_PROGRESS
         project.save()
+
+    # Notify team members accepted
+    for m in app.team.members.all():
+        notify(
+            m.user,
+            f"Candidature acceptée pour '{project.title}' avec l'équipe '{app.team.name}'.",
+            url=f"/projects/{project.id}/",
+            type="APPLICATION_ACCEPTED",
+        )
 
     messages.success(request, "Candidature acceptée. Projet en cours.")
     return redirect("applications:project_list", project_id=project.id)
@@ -96,5 +112,15 @@ def application_reject(request, application_id):
         app.status = Application.Status.REJECTED
         app.reviewed_at = timezone.now()
         app.save()
+
+        # Notify team members rejected
+        for m in app.team.members.all():
+            notify(
+                m.user,
+                f"Candidature refusée pour '{app.project.title}' avec l'équipe '{app.team.name}'.",
+                url=f"/projects/{app.project.id}/",
+                type="APPLICATION_REJECTED",
+            )
+
         messages.success(request, "Candidature refusée.")
     return redirect("applications:project_list", project_id=app.project.id)

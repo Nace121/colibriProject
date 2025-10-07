@@ -1,4 +1,3 @@
-
 import os, json
 from decimal import Decimal
 import stripe
@@ -13,6 +12,7 @@ from apps.projects.models import Project
 from apps.applications.models import Application
 from apps.students.models import Student
 from .models import Payment, StudentPayment
+from apps.notifications.services import notify  # NEW
 
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY", "")
 
@@ -119,6 +119,21 @@ def stripe_webhook(request):
                         student=m,
                         defaults={"amount": per, "status": StudentPayment.Status.PAID, "paid_at": timezone.now()},
                     )
+
+            # Notifications
+            notify(
+                payment.company.user,
+                f"Paiement confirmé pour '{payment.project.title}' ({payment.amount} €).",
+                url="/payments/company/",
+                type="PAYMENT_SUCCEEDED",
+            )
+            for m in payment.team.members.all():
+                notify(
+                    m.user,
+                    f"Revenu crédité pour '{payment.project.title}'.",
+                    url="/payments/student/",
+                    type="PAYMENT_SUCCEEDED",
+                )
     return HttpResponse("OK")
 
 @login_required

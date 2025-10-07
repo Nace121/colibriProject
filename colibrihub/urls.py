@@ -14,4 +14,5 @@ urlpatterns = [
     path("projects/", include(("apps.projects.urls", "projects"), namespace="projects")),
     path("applications/", include(("apps.applications.urls", "applications"), namespace="applications")),
     path("payments/", include(("apps.payments.urls", "payments"), namespace="payments")),
+    path("notifications/", include("apps.notifications.urls", namespace="notifications")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

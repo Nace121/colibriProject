@@ -1,0 +1,21 @@
+{% if user.is_authenticated %}
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle position-relative" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    🔔
+    {% if notifications_unread_count and notifications_unread_count > 0 %}
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        {{ notifications_unread_count }}
+      </span>
+    {% endif %}
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown">
+    <li><a class="dropdown-item" href="{% url 'notifications:list' %}">Voir toutes les notifications</a></li>
+    <li><hr class="dropdown-divider"></li>
+    {% if notifications_unread_count and notifications_unread_count > 0 %}
+      <li><a class="dropdown-item" href="{% url 'notifications:read_all' %}">Tout marquer comme lu</a></li>
+    {% else %}
+      <li><span class="dropdown-item-text text-muted">Aucune non lue</span></li>
+    {% endif %}
+  </ul>
+</li>
+{% endif %}

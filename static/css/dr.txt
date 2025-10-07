@@ -1,0 +1,14 @@
+python manage.py shell -c "from apps.students.models import Student;
+from apps.teams.models import Team;
+from apps.companies.models import Company;
+from apps.projects.models import Project;
+comp=Company.objects.get(user__username='acme');
+s1=Student.objects.get(user__username='alice');
+s2=Student.objects.get(user__username='bob');
+team=Team.objects.create(name='TeamAlpha',leader=s1);
+team.members.add(s1,s2);
+proj=Project.objects.create(title='Site vitrine',
+description='Brief test',
+company=comp, budget=1000,
+status=Project.Status.PUBLISHED);
+print(proj.id)"
