@@ -1,0 +1,9 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-8 mx-auto text-center">
+  <h1 class="h4 mb-3">Paiement annulé</h1>
+  <p>Le paiement pour <strong>{{ payment.project.title }}</strong> a été annulé.</p>
+  <a class="btn btn-secondary" href="{% url 'projects:detail' payment.project.id %}">Retour au projet</a>
+</div>
+{% endblock %}

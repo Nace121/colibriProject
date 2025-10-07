@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 from .models import User
 
 class RegisterStudentForm(UserCreationForm):
@@ -8,6 +8,12 @@ class RegisterStudentForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if email and User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("Cet email est déjà utilisé.")
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -23,6 +29,12 @@ class RegisterCompanyForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if email and User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("Cet email est déjà utilisé.")
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)

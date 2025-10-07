@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h4 mb-3">Candidatures pour "{{ project.title }}"</h1>
+{% if applications %}
+  <div class="list-group">
+    {% for a in applications %}
+      <div class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ a.team.name }}</strong>
+            <div class="small text-muted">Prix: {{ a.proposed_price }} € • Durée: {{ a.proposed_duration }} j</div>
+            <div class="mt-1">{{ a.cover_letter|linebreaksbr }}</div>
+          </div>
+          <div class="text-end">
+            <div class="mb-2"><span class="badge bg-secondary">{{ a.get_status_display }}</span></div>
+            <a class="btn btn-success btn-sm" href="{% url 'applications:accept' a.id %}">Accepter</a>
+            <a class="btn btn-outline-danger btn-sm" href="{% url 'applications:reject' a.id %}">Refuser</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Aucune candidature pour le moment.</p>
+{% endif %}
+{% endblock %}

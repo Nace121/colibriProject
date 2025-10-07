@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth import login, logout
 from django.contrib import messages
 from .forms import RegisterStudentForm, RegisterCompanyForm
 
@@ -27,3 +26,8 @@ def register_company(request):
     else:
         form = RegisterCompanyForm()
     return render(request, "accounts/register_company.html", {"form": form})
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, "Tu es déconnecté.")
+    return redirect("core:home")

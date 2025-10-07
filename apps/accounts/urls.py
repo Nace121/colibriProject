@@ -6,7 +6,7 @@ app_name = "accounts"
 
 urlpatterns = [
     path("login/", auth_views.LoginView.as_view(template_name="accounts/login.html"), name="login"),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("logout/", views.logout_view, name="logout"),
     path("register/student/", views.register_student, name="register_student"),
     path("register/company/", views.register_company, name="register_company"),
     path("password-reset/", auth_views.PasswordResetView.as_view(), name="password_reset"),

@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h4 mb-3">Mes revenus</h1>
+{% if student_payments %}
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr><th>Projet</th><th>Montant</th><th>Status</th><th>Payé le</th></tr>
+      </thead>
+      <tbody>
+        {% for sp in student_payments %}
+          <tr>
+            <td>{{ sp.payment.project.title }}</td>
+            <td>{{ sp.amount }} €</td>
+            <td><span class="badge bg-secondary">{{ sp.get_status_display }}</span></td>
+            <td>{% if sp.paid_at %}{{ sp.paid_at|date:"d/m/Y H:i" }}{% else %}—{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p>Aucun revenu pour le moment.</p>
+{% endif %}
+{% endblock %}

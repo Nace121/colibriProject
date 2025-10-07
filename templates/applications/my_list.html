@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h4 mb-3">Mes candidatures d'équipe</h1>
+{% if applications %}
+  <div class="list-group">
+    {% for a in applications %}
+      <div class="list-group-item">
+        <div class="d-flex justify-content-between">
+          <div>
+            <strong>{{ a.project.title }}</strong> • {{ a.team.name }}
+            <div class="small text-muted">Proposé: {{ a.proposed_price }} € • {{ a.proposed_duration }} j</div>
+          </div>
+          <div><span class="badge bg-secondary">{{ a.get_status_display }}</span></div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Aucune candidature.</p>
+{% endif %}
+{% endblock %}

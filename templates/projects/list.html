@@ -1,0 +1,58 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h4 mb-3">Projets disponibles</h1>
+
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-3">
+    <input class="form-control" type="text" name="q" value="{{ q }}" placeholder="Recherche...">
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="category">
+      <option value="">Toutes catégories</option>
+      <option value="WEB" {% if category == "WEB" %}selected{% endif %}>Web</option>
+      <option value="MOBILE" {% if category == "MOBILE" %}selected{% endif %}>Mobile</option>
+      <option value="CYBER" {% if category == "CYBER" %}selected{% endif %}>Cyber</option>
+      <option value="AI" {% if category == "AI" %}selected{% endif %}>IA</option>
+      <option value="DATA" {% if category == "DATA" %}selected{% endif %}>Data</option>
+      <option value="DEVOPS" {% if category == "DEVOPS" %}selected{% endif %}>DevOps</option>
+      <option value="OTHER" {% if category == "OTHER" %}selected{% endif %}>Autre</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <input class="form-control" type="number" step="0.01" name="budget_min" value="{{ budget_min }}" placeholder="Budget min">
+  </div>
+  <div class="col-md-2">
+    <input class="form-control" type="number" step="0.01" name="budget_max" value="{{ budget_max }}" placeholder="Budget max">
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="skills" multiple>
+      {% for s in skills %}
+        <option value="{{ s.id }}" {% if s.id in selected_skills %}selected{% endif %}>{{ s.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Filtrer</button>
+    <a class="btn btn-light" href="{% url 'projects:list' %}">Réinitialiser</a>
+  </div>
+</form>
+
+{% if projects %}
+  <div class="list-group">
+    {% for p in projects %}
+      <a class="list-group-item list-group-item-action" href="{% url 'projects:detail' p.id %}">
+        <div class="d-flex justify-content-between">
+          <div>
+            <strong>{{ p.title }}</strong><br>
+            <small>{{ p.get_category_display }} • {{ p.budget }} € • Durée {{ p.duration }} j</small>
+          </div>
+          <div><small>Publié {{ p.published_at|date:"d/m/Y" }}</small></div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Aucun projet trouvé avec ces filtres.</p>
+{% endif %}
+{% endblock %}

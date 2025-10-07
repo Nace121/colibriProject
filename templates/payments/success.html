@@ -1,0 +1,10 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-8 mx-auto text-center">
+  <h1 class="h4 mb-3">Paiement confirmé</h1>
+  <p>Merci. Le paiement pour le projet <strong>{{ payment.project.title }}</strong> a été confirmé.</p>
+  <p>Montant: {{ payment.amount }} € • Commission: {{ payment.platform_fee }} € • Net: {{ payment.net_amount }} €</p>
+  <a class="btn btn-primary" href="{% url 'payments:company_list' %}">Voir mes paiements</a>
+</div>
+{% endblock %}

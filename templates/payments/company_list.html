@@ -1,0 +1,29 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h4 mb-3">Mes paiements</h1>
+{% if payments %}
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr><th>Projet</th><th>Équipe</th><th>Montant</th><th>Commission</th><th>Net</th><th>Status</th><th>Date</th></tr>
+      </thead>
+      <tbody>
+        {% for p in payments %}
+          <tr>
+            <td>{{ p.project.title }}</td>
+            <td>{{ p.team.name }}</td>
+            <td>{{ p.amount }} €</td>
+            <td>{{ p.platform_fee }} €</td>
+            <td>{{ p.net_amount }} €</td>
+            <td><span class="badge bg-secondary">{{ p.get_status_display }}</span></td>
+            <td>{{ p.created_at|date:"d/m/Y H:i" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p>Aucun paiement.</p>
+{% endif %}
+{% endblock %}
